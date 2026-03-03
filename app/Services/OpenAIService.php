@@ -69,24 +69,4 @@ class OpenAIService
 
         return ['ids' => [], 'message' => 'Terjadi kesalahan saat menghubungi AI.', 'audio_url' => null];
     }
-
-    public function generateAudio(string $text): ?string
-    {
-        $response = Http::withHeaders([
-            'Authorization' => "Bearer {$this->apiKey}",
-            'Content-Type' => 'application/json',
-        ])->post('https://api.openai.com/v1/audio/speech', [
-            'model' => 'tts-1',
-            'input' => $text,
-            'voice' => 'nova',
-        ]);
-
-        if ($response->successful()) {
-            $fileName = 'response_' . uniqid() . '.mp3';
-            \Illuminate\Support\Facades\Storage::disk('public')->put("audio/{$fileName}", $response->body());
-            return asset("storage/audio/{$fileName}");
-        }
-
-        return null;
-    }
 }

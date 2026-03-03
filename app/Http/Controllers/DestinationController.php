@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Destination;
-use App\Services\OpenAIService;
+use App\Services\GeminiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -24,7 +24,7 @@ class DestinationController extends Controller
         ]);
     }
 
-    public function search(Request $request, OpenAIService $openAIService)
+    public function search(Request $request, GeminiService $geminiService)
     {
         $query = $request->input('query');
 
@@ -33,7 +33,7 @@ class DestinationController extends Controller
         }
 
         $allDestinations = Destination::all();
-        $aiResult = $openAIService->searchDestinations($query, $allDestinations->toArray());
+        $aiResult = $geminiService->searchDestinations($query, $allDestinations->toArray());
 
         $recommendedIds = $aiResult['ids'] ?? [];
         $message = $aiResult['message'] ?? '';
