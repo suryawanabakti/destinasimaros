@@ -41,7 +41,7 @@ export default function AuthSplitLayout({
                     </div>
 
                     <p className="text-center text-sm text-muted-foreground pt-8 border-t border-gray-100 dark:border-white/5 italic">
-                        &copy; 2025 MarosAI. Jelajahi Keindahan Butta Salewangang.
+                        &copy; 2025 Wisata Maros. Jelajahi Keindahan Butta Salewangang.
                     </p>
                 </div>
             </div>

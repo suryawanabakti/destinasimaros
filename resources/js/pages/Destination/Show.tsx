@@ -404,7 +404,7 @@ export default function Show({ destination, auth }: Props) {
             {/* Footer */}
             <footer className="border-t border-gray-100 dark:border-white/5 py-12 px-6 mt-20">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 opacity-60 text-sm italic">
-                    <p>&copy; 2025 MarosAI. Jelajahi Keindahan Butta Salewangang.</p>
+                    <p>&copy; 2025 Wisata Maros. Jelajahi Keindahan Butta Salewangang.</p>
                 </div>
             </footer>
         </div>

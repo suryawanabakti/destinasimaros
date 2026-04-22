@@ -412,7 +412,7 @@ export default function Landing({ initialDestinations, auth }: Props) {
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between mb-1">
                                             <h3 className="text-sm font-bold text-emerald-600 flex items-center gap-2">
-                                                Rekomendasi MarosAI
+                                                Rekomendasi Wisata Maros
                                             </h3>
                                             {speechSupported && (
                                                 <button
@@ -593,7 +593,7 @@ export default function Landing({ initialDestinations, auth }: Props) {
             {/* Footer */}
             <footer className="border-t border-gray-100 dark:border-white/5 py-12 px-6">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 opacity-60 text-sm italic">
-                    <p>&copy; 2025 MarosAI. Jelajahi Keindahan Butta Salewangang.</p>
+                    <p>&copy; 2025 Wisata Maros. Jelajahi Keindahan Butta Salewangang.</p>
                     <div className="flex gap-8">
                         <a href="#" className="hover:text-emerald-600 transition-colors">Instagram</a>
                         <a href="#" className="hover:text-emerald-600 transition-colors">Twitter</a>
