@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // test
         Schema::table('destinations', function (Blueprint $table) {
             $table->string('operational_hours')->nullable();
             $table->string('entrance_fee')->nullable();
