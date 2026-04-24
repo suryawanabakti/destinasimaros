@@ -41,6 +41,10 @@ interface Destination {
     reviews: Review[];
     images: DestinationImage[];
     average_rating: number;
+    operational_hours: string;
+    entrance_fee: string;
+    google_maps_url: string;
+    visiting_tips: string[];
 }
 
 interface Props {
@@ -366,20 +370,20 @@ export default function Show({ destination, auth }: Props) {
                                     <Clock className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                                     <div>
                                         <p className="text-sm font-semibold opacity-80">Jam Operasional</p>
-                                        <p className="font-medium">08:00 - 17:00 WITA</p>
+                                        <p className="font-medium">{destination.operational_hours || '08:00 - 17:00 WITA'}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
                                     <Ticket className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                                     <div>
                                         <p className="text-sm font-semibold opacity-80">Tiket Masuk (Estimasi)</p>
-                                        <p className="font-medium">Rp 15.000 - Rp 50.000</p>
+                                        <p className="font-medium">{destination.entrance_fee || 'Rp 15.000 - Rp 50.000'}</p>
                                     </div>
                                 </div>
                             </div>
 
                             <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destination.name + ' ' + destination.location)}`}
+                                href={destination.google_maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destination.name + ' ' + destination.location)}`}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="mt-8 block w-full py-3 bg-red-600 text-white text-center rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-500/20"
@@ -391,10 +395,18 @@ export default function Show({ destination, auth }: Props) {
                         <div className="bg-white dark:bg-[#161615] p-6 rounded-3xl border border-gray-100 dark:border-white/5">
                             <h3 className="text-lg font-bold mb-2">Tips Berkunjung</h3>
                             <ul className="list-disc list-inside space-y-2 text-sm opacity-70 leading-relaxed">
-                                <li>Bawa bekal air minum secukupnya.</li>
-                                <li>Gunakan alas kaki yang nyaman untuk berjalan.</li>
-                                <li>Jaga kebersihan area wisata.</li>
-                                <li>Siapkan kamera untuk momen terbaik!</li>
+                                {destination.visiting_tips && destination.visiting_tips.length > 0 ? (
+                                    destination.visiting_tips.map((tip, idx) => (
+                                        <li key={idx}>{tip}</li>
+                                    ))
+                                ) : (
+                                    <>
+                                        <li>Bawa bekal air minum secukupnya.</li>
+                                        <li>Gunakan alas kaki yang nyaman untuk berjalan.</li>
+                                        <li>Jaga kebersihan area wisata.</li>
+                                        <li>Siapkan kamera untuk momen terbaik!</li>
+                                    </>
+                                )}
                             </ul>
                         </div>
                     </motion.div>

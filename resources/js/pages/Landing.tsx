@@ -248,7 +248,7 @@ export default function Landing({ initialDestinations, auth }: Props) {
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-emerald-500/20">
                         <img src="/logomaros.png" alt="Logo Maros" className="w-full h-full object-cover" />
                     </div>
-                    <span className="text-xl font-bold tracking-tight">Maros<span className="text-emerald-600">AIs</span></span>
+                    <span className="text-xl font-bold tracking-tight">Wisata<span className="text-emerald-600">Maros</span></span>
                 </div>
                 <div className="hidden md:flex items-center gap-8 text-sm font-medium opacity-80">
                     <a href="#destinations" className="hover:text-emerald-600 transition-colors">Destinasi</a>

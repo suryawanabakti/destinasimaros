@@ -13,10 +13,15 @@ class Destination extends Model
         'image_url',
         'category',
         'tags',
+        'operational_hours',
+        'entrance_fee',
+        'google_maps_url',
+        'visiting_tips',
     ];
 
     protected $casts = [
         'tags' => 'array',
+        'visiting_tips' => 'array',
     ];
 
     public function reviews()

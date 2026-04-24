@@ -23,7 +23,7 @@ export default function AuthSplitLayout({
                             <div className="h-10 w-10 rounded-xl bg-red-600 flex items-center justify-center text-white shadow-lg shadow-red-600/20 group-hover:scale-110 transition-transform">
                                 <span className="font-black text-xl">M</span>
                             </div>
-                            <span className="text-2xl font-black tracking-tighter">Maros<span className="text-red-600">AI</span></span>
+                            <span className="text-2xl font-black tracking-tighter">Wisata <span className="text-red-600">Maros</span></span>
                         </Link>
 
                         <div className="space-y-2">

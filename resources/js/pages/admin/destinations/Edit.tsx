@@ -32,6 +32,10 @@ interface Destination {
     image_url: string;
     category: string;
     tags: string[];
+    operational_hours: string;
+    entrance_fee: string;
+    google_maps_url: string;
+    visiting_tips: string[];
     images: DestinationImage[];
 }
 
@@ -64,6 +68,10 @@ export default function Edit({ destination }: Props) {
         location: destination.location || '',
         category: destination.category || '',
         tags: destination.tags || [],
+        operational_hours: destination.operational_hours || '',
+        entrance_fee: destination.entrance_fee || '',
+        google_maps_url: destination.google_maps_url || '',
+        visiting_tips: destination.visiting_tips || [],
         image: null as File | null,
         gallery: [] as File[],
         _method: 'PUT',
@@ -181,12 +189,59 @@ export default function Edit({ destination }: Props) {
                         </div>
                     </div>
 
-                    {/* Tags */}
                     <TagsInput
                         value={data.tags}
                         onChange={(tags) => setData('tags', tags)}
                         error={errors.tags}
+                        label="Tags"
                         placeholder="Add tags like 'air terjun', 'keluarga', etc."
+                    />
+
+                    {/* Visiting Info */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="operational_hours">Jam Operasional</Label>
+                            <Input
+                                id="operational_hours"
+                                value={data.operational_hours}
+                                onChange={(e) => setData('operational_hours', e.target.value)}
+                                placeholder="e.g., 08:00 - 17:00 WITA"
+                                className="w-full"
+                            />
+                            <InputError message={errors.operational_hours} />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="entrance_fee">Tiket Masuk (Estimasi)</Label>
+                            <Input
+                                id="entrance_fee"
+                                value={data.entrance_fee}
+                                onChange={(e) => setData('entrance_fee', e.target.value)}
+                                placeholder="e.g., Rp 15.000 - Rp 50.000"
+                                className="w-full"
+                            />
+                            <InputError message={errors.entrance_fee} />
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="google_maps_url">Google Maps URL</Label>
+                        <Input
+                            id="google_maps_url"
+                            value={data.google_maps_url}
+                            onChange={(e) => setData('google_maps_url', e.target.value)}
+                            placeholder="https://goo.gl/maps/..."
+                            className="w-full"
+                        />
+                        <InputError message={errors.google_maps_url} />
+                    </div>
+
+                    <TagsInput
+                        value={data.visiting_tips}
+                        onChange={(tips) => setData('visiting_tips', tips)}
+                        error={errors.visiting_tips as unknown as string}
+                        label="Tips Berkunjung"
+                        placeholder="Tambah tips... (tekan Enter)"
                     />
 
                     {/* Image Upload */}
