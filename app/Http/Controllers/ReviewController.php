@@ -19,4 +19,11 @@ class ReviewController extends Controller
 
         return back()->with('success', 'Komentar berhasil ditambahkan!');
     }
+
+    public function destroy(Review $review)
+    {
+        $review->delete();
+
+        return back()->with('success', 'Ulasan berhasil dihapus!');
+    }
 }

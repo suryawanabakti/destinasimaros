@@ -2,8 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { MessageSquare, Star, User as UserIcon, MapPin } from 'lucide-react';
+import { Head, router } from '@inertiajs/react';
+import { MessageSquare, Star, User as UserIcon, MapPin, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface Report {
     id: number;
@@ -25,6 +26,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Reviews({ reports = [] }: Props) {
+    const handleDelete = (id: number) => {
+        if (confirm('Apakah Anda yakin ingin menghapus ulasan ini?')) {
+            router.delete(`/admin/reviews/${id}`);
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Laporan Rating & Review" />
@@ -49,6 +56,7 @@ export default function Reviews({ reports = [] }: Props) {
                                     <TableHead>Rating</TableHead>
                                     <TableHead>Komentar</TableHead>
                                     <TableHead className="text-right">Tanggal</TableHead>
+                                    <TableHead className="text-right">Aksi</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -83,11 +91,20 @@ export default function Reviews({ reports = [] }: Props) {
                                                 year: 'numeric'
                                             })}
                                         </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button 
+                                                variant="destructive" 
+                                                size="sm" 
+                                                onClick={() => handleDelete(report.id)}
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                                 {reports.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={4} className="text-center py-10 opacity-50 italic">
+                                        <TableCell colSpan={5} className="text-center py-10 opacity-50 italic">
                                             Belum ada ulasan yang masuk.
                                         </TableCell>
                                     </TableRow>

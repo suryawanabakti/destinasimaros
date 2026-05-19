@@ -43,6 +43,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             // Individual Image Deletion
             Route::delete('destination-images/{image}', [DestinationController::class, 'deleteImage'])->name('destination-images.destroy');
+
+            // Reviews Deletion
+            Route::delete('reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
         });
     });
 });
