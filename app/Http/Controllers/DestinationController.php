@@ -20,20 +20,41 @@ class DestinationController extends Controller
     public function show(Destination $destination)
     {
         return Inertia::render('Destination/Show', [
-            'destination' => $destination->load(['reviews.user', 'images']),
+            'destination' => $destination->load(['reviews.user', 'images', 'facilities']),
         ]);
     }
 
     public function search(Request $request, GeminiService $geminiService)
     {
         $query = $request->input('query');
+        $userLat = $request->input('latitude');
+        $userLng = $request->input('longitude');
 
-        if (!$query) {
+        if (! $query) {
             return response()->json([]);
         }
 
         $allDestinations = Destination::all();
-        $aiResult = $geminiService->searchDestinations($query, $allDestinations->toArray());
+
+        $destinationsArray = $allDestinations->toArray();
+
+        // Calculate distance from user to each destination if location provided
+        if ($userLat && $userLng) {
+            $destinationsArray = array_map(function ($dest) use ($userLat, $userLng) {
+                if ($dest['latitude'] && $dest['longitude']) {
+                    $dest['distance_km'] = $this->calculateDistance(
+                        (float) $userLat,
+                        (float) $userLng,
+                        (float) $dest['latitude'],
+                        (float) $dest['longitude']
+                    );
+                }
+
+                return $dest;
+            }, $destinationsArray);
+        }
+
+        $aiResult = $geminiService->searchDestinations($query, $destinationsArray);
 
         $recommendedIds = $aiResult['ids'] ?? [];
         $message = $aiResult['message'] ?? '';
@@ -43,13 +64,13 @@ class DestinationController extends Controller
             return response()->json([
                 'data' => [],
                 'message' => $message,
-                'audio_url' => $audioUrl
+                'audio_url' => $audioUrl,
             ]);
         }
 
         // Urutkan berdasarkan rekomendasi AI
         $destinations = Destination::whereIn('id', $recommendedIds)
-            ->with(['images']) // Load images for search results too
+            ->with(['images'])
             ->get()
             ->sortBy(function ($destination) use ($recommendedIds) {
                 return array_search($destination->id, $recommendedIds);
@@ -59,14 +80,30 @@ class DestinationController extends Controller
         return response()->json([
             'data' => $destinations,
             'message' => $message,
-            'audio_url' => $audioUrl
+            'audio_url' => $audioUrl,
         ]);
+    }
+
+    private function calculateDistance(float $lat1, float $lng1, float $lat2, float $lng2): int
+    {
+        $earthRadius = 6371;
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLng = deg2rad($lng2 - $lng1);
+
+        $a = sin($dLat / 2) * sin($dLat / 2)
+            + cos(deg2rad($lat1)) * cos(deg2rad($lat2))
+            * sin($dLng / 2) * sin($dLng / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        return (int) round($earthRadius * $c);
     }
 
     // Admin CRUD Methods
     public function adminIndex()
     {
-        $destinations = Destination::withCount('images')->latest()->paginate(10);
+        $destinations = Destination::withCount('images')->with('facilities')->latest()->paginate(10);
 
         return Inertia::render('admin/destinations/Index', [
             'destinations' => $destinations,
@@ -92,6 +129,9 @@ class DestinationController extends Controller
             'google_maps_url' => 'nullable|string|max:255',
             'visiting_tips' => 'nullable|array',
             'visiting_tips.*' => 'string',
+            'facilities' => 'nullable|array',
+            'facilities.*.name' => 'required_with:facilities|string|max:255',
+            'facilities.*.price' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'gallery' => 'nullable|array',
             'gallery.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -104,6 +144,11 @@ class DestinationController extends Controller
         }
 
         $destination = Destination::create($validated);
+
+        // Handle facilities
+        if ($request->filled('facilities')) {
+            $destination->facilities()->createMany($validated['facilities']);
+        }
 
         // Handle gallery images upload
         if ($request->hasFile('gallery')) {
@@ -122,7 +167,7 @@ class DestinationController extends Controller
     public function edit(Destination $destination)
     {
         return Inertia::render('admin/destinations/Edit', [
-            'destination' => $destination->load('images'),
+            'destination' => $destination->load(['images', 'facilities']),
         ]);
     }
 
@@ -140,6 +185,9 @@ class DestinationController extends Controller
             'google_maps_url' => 'nullable|string|max:255',
             'visiting_tips' => 'nullable|array',
             'visiting_tips.*' => 'string',
+            'facilities' => 'nullable|array',
+            'facilities.*.name' => 'required_with:facilities|string|max:255',
+            'facilities.*.price' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'gallery' => 'nullable|array',
             'gallery.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
@@ -158,6 +206,12 @@ class DestinationController extends Controller
         }
 
         $destination->update($validated);
+
+        // Sync facilities
+        if ($request->has('facilities')) {
+            $destination->facilities()->delete();
+            $destination->facilities()->createMany($validated['facilities'] ?? []);
+        }
 
         // Handle new gallery images upload
         if ($request->hasFile('gallery')) {

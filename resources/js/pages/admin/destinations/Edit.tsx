@@ -16,12 +16,23 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm, router } from '@inertiajs/react';
-import { ArrowLeft, Save, X } from 'lucide-react';
+import { ArrowLeft, Plus, Save, X } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 interface DestinationImage {
     id: number;
     image_url: string;
+}
+
+interface FacilityItem {
+    id: number;
+    name: string;
+    price: string | null;
+}
+
+interface FacilityInput {
+    name: string;
+    price: string;
 }
 
 interface Destination {
@@ -37,6 +48,7 @@ interface Destination {
     google_maps_url: string;
     visiting_tips: string[];
     images: DestinationImage[];
+    facilities: FacilityItem[];
 }
 
 interface Props {
@@ -72,6 +84,7 @@ export default function Edit({ destination }: Props) {
         entrance_fee: destination.entrance_fee || '',
         google_maps_url: destination.google_maps_url || '',
         visiting_tips: destination.visiting_tips || [],
+        facilities: (destination.facilities || []).map(f => ({ name: f.name, price: f.price || '' })) as FacilityInput[],
         image: null as File | null,
         gallery: [] as File[],
         _method: 'PUT',
@@ -80,6 +93,21 @@ export default function Edit({ destination }: Props) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(`/admin/destinations/${destination.id}`);
+    };
+
+    const addFacility = () => {
+        setData('facilities', [...data.facilities, { name: '', price: '' }]);
+    };
+
+    const removeFacility = (index: number) => {
+        setData('facilities', data.facilities.filter((_, i) => i !== index));
+    };
+
+    const updateFacility = (index: number, field: keyof FacilityInput, value: string) => {
+        const updated = data.facilities.map((f, i) =>
+            i === index ? { ...f, [field]: value } : f
+        );
+        setData('facilities', updated);
     };
 
     const deleteGalleryImage = (imageId: number) => {
@@ -243,6 +271,37 @@ export default function Edit({ destination }: Props) {
                         label="Tips Berkunjung"
                         placeholder="Tambah tips... (tekan Enter)"
                     />
+
+                    {/* Facilities */}
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <Label>Fasilitas & Harga</Label>
+                            <Button type="button" variant="outline" size="sm" onClick={addFacility}>
+                                <Plus className="h-4 w-4 mr-1" />
+                                Tambah Fasilitas
+                            </Button>
+                        </div>
+                        {data.facilities.map((facility, index) => (
+                            <div key={index} className="flex items-start gap-3 p-4 rounded-lg border bg-muted/30">
+                                <div className="flex-1 space-y-2">
+                                    <Input
+                                        value={facility.name}
+                                        onChange={(e) => updateFacility(index, 'name', e.target.value)}
+                                        placeholder="Nama fasilitas (e.g., Kolam Renang)"
+                                    />
+                                    <Input
+                                        value={facility.price}
+                                        onChange={(e) => updateFacility(index, 'price', e.target.value)}
+                                        placeholder="Harga (e.g., Rp 10.000)"
+                                    />
+                                </div>
+                                <Button type="button" variant="ghost" size="sm" onClick={() => removeFacility(index)} className="text-red-600 mt-1">
+                                    <X className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        ))}
+                        {errors.facilities && <InputError message={errors.facilities as unknown as string} />}
+                    </div>
 
                     {/* Image Upload */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -18,7 +18,8 @@ class DestinationSeeder extends Seeder
                 'location' => 'Kecamatan Bantimurung, Maros',
                 'image_url' => 'https://images.unsplash.com/photo-1596401057633-5310bad5a9e6?auto=format&fit=crop&q=80&w=800',
                 'category' => 'Alam & Konservasi',
-
+                'latitude' => -5.010583,
+                'longitude' => 119.663139,
             ],
             [
                 'name' => 'Rammang-Rammang',
@@ -26,7 +27,8 @@ class DestinationSeeder extends Seeder
                 'location' => 'Desa Salenrang, Bontoa, Maros',
                 'image_url' => 'https://images.unsplash.com/photo-1624535492451-93041c2c2f60?auto=format&fit=crop&q=80&w=800',
                 'category' => 'Pegunungan & Karst',
-
+                'latitude' => -4.906389,
+                'longitude' => 119.555278,
             ],
             [
                 'name' => 'Air Terjun Lacolla',
@@ -34,7 +36,8 @@ class DestinationSeeder extends Seeder
                 'location' => 'Desa Cenrana Baru, Cenrana, Maros',
                 'image_url' => 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&q=80&w=800',
                 'category' => 'Air Terjun',
-
+                'latitude' => -4.956667,
+                'longitude' => 119.631667,
             ],
             [
                 'name' => 'Leang-Leang Prehistoric Park',
@@ -42,7 +45,8 @@ class DestinationSeeder extends Seeder
                 'location' => 'Kelurahan Leang-Leang, Bantimurung, Maros',
                 'image_url' => 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800',
                 'category' => 'Sejarah & Budaya',
-
+                'latitude' => -5.002639,
+                'longitude' => 119.650500,
             ],
             [
                 'name' => 'Grand Mall Maros',
@@ -50,7 +54,8 @@ class DestinationSeeder extends Seeder
                 'location' => 'Jl. Poros Makassar - Maros',
                 'image_url' => 'https://images.unsplash.com/photo-1567449303078-57ad995bd3a1?auto=format&fit=crop&q=80&w=800',
                 'category' => 'Modern & Belanja',
-
+                'latitude' => -5.005556,
+                'longitude' => 119.574444,
             ],
             [
                 'name' => 'Wisata Pattunuang',
@@ -58,7 +63,8 @@ class DestinationSeeder extends Seeder
                 'location' => 'Desa Samangki, Simbang, Maros',
                 'image_url' => 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&q=80&w=800',
                 'category' => 'Petualangan',
-
+                'latitude' => -5.020833,
+                'longitude' => 119.680556,
             ],
             [
                 'name' => 'Air Terjun Lengang',
@@ -66,7 +72,8 @@ class DestinationSeeder extends Seeder
                 'location' => 'Kecamatan Mallawa, Maros',
                 'image_url' => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800',
                 'category' => 'Air Terjun',
-
+                'latitude' => -5.027222,
+                'longitude' => 119.895833,
             ],
         ];
 

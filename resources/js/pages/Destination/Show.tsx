@@ -30,6 +30,12 @@ interface DestinationImage {
     image_url: string;
 }
 
+interface Facility {
+    id: number;
+    name: string;
+    price: string | null;
+}
+
 interface Destination {
     id: number;
     name: string;
@@ -40,11 +46,14 @@ interface Destination {
     tags: string[];
     reviews: Review[];
     images: DestinationImage[];
+    facilities: Facility[];
     average_rating: number;
     operational_hours: string;
     entrance_fee: string;
     google_maps_url: string;
     visiting_tips: string[];
+    latitude?: number;
+    longitude?: number;
 }
 
 interface Props {
@@ -380,15 +389,41 @@ export default function Show({ destination, auth }: Props) {
                                         <p className="font-medium">{destination.entrance_fee || 'Rp 15.000 - Rp 50.000'}</p>
                                     </div>
                                 </div>
+                                {destination.facilities && destination.facilities.length > 0 && (
+                                    <div className="pt-4 border-t border-red-200 dark:border-red-800/20">
+                                        <p className="text-sm font-semibold opacity-80 mb-3">Fasilitas</p>
+                                        <div className="space-y-2.5">
+                                            {destination.facilities.map((facility) => (
+                                                <div key={facility.id} className="flex items-start gap-3">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
+                                                    <div>
+                                                        <p className="font-medium text-sm">{facility.name}</p>
+                                                        {facility.price && (
+                                                            <p className="text-xs opacity-70">{facility.price}</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <a
                                 href={destination.google_maps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destination.name + ' ' + destination.location)}`}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="mt-8 block w-full py-3 bg-red-600 text-white text-center rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-500/20"
+                                className="mt-4 block w-full py-3 bg-red-600 text-white text-center rounded-xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-500/20"
                             >
                                 Lihat di Google Maps
+                            </a>
+                            <a
+                                href={`https://www.google.com/maps/dir/?api=1&destination=${destination.latitude},${destination.longitude}&travelmode=driving`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="block w-full py-3 bg-white dark:bg-[#161615] text-red-600 text-center rounded-xl font-bold hover:bg-red-50 dark:hover:bg-red-900/10 transition-all border border-red-200 dark:border-red-800/20"
+                            >
+                                🚗 Rute Tercepat dari Lokasiku
                             </a>
                         </div>
 

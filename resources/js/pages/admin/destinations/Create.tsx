@@ -16,7 +16,7 @@ import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Plus, Save, X } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -34,6 +34,11 @@ const categories = [
     'Wisata Petualangan',
 ];
 
+interface FacilityInput {
+    name: string;
+    price: string;
+}
+
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
@@ -45,9 +50,25 @@ export default function Create() {
         entrance_fee: '',
         google_maps_url: '',
         visiting_tips: [] as string[],
+        facilities: [] as FacilityInput[],
         image: null as File | null,
         gallery: [] as File[],
     });
+
+    const addFacility = () => {
+        setData('facilities', [...data.facilities, { name: '', price: '' }]);
+    };
+
+    const removeFacility = (index: number) => {
+        setData('facilities', data.facilities.filter((_, i) => i !== index));
+    };
+
+    const updateFacility = (index: number, field: keyof FacilityInput, value: string) => {
+        const updated = data.facilities.map((f, i) =>
+            i === index ? { ...f, [field]: value } : f
+        );
+        setData('facilities', updated);
+    };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -193,6 +214,37 @@ export default function Create() {
                         label="Tips Berkunjung"
                         placeholder="Tambah tips... (tekan Enter)"
                     />
+
+                    {/* Facilities */}
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <Label>Fasilitas & Harga</Label>
+                            <Button type="button" variant="outline" size="sm" onClick={addFacility}>
+                                <Plus className="h-4 w-4 mr-1" />
+                                Tambah Fasilitas
+                            </Button>
+                        </div>
+                        {data.facilities.map((facility, index) => (
+                            <div key={index} className="flex items-start gap-3 p-4 rounded-lg border bg-muted/30">
+                                <div className="flex-1 space-y-2">
+                                    <Input
+                                        value={facility.name}
+                                        onChange={(e) => updateFacility(index, 'name', e.target.value)}
+                                        placeholder="Nama fasilitas (e.g., Kolam Renang)"
+                                    />
+                                    <Input
+                                        value={facility.price}
+                                        onChange={(e) => updateFacility(index, 'price', e.target.value)}
+                                        placeholder="Harga (e.g., Rp 10.000)"
+                                    />
+                                </div>
+                                <Button type="button" variant="ghost" size="sm" onClick={() => removeFacility(index)} className="text-red-600 mt-1">
+                                    <X className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        ))}
+                        {errors.facilities && <InputError message={errors.facilities} />}
+                    </div>
 
                     {/* Image Upload */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

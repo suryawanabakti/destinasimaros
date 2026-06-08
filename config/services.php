@@ -30,5 +30,8 @@ return [
     'gemini' => [
         'key' => env('GEMINI_API_KEY'),
     ],
+    'elevenlabs' => [
+        'key' => env('ELEVENLABS_API_KEY'),
+    ],
 
 ];

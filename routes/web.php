@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\TtsController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::get('/tts/synthesize', [TtsController::class, 'synthesize']);
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [DestinationController::class, 'index'])->name('home');
     Route::get('/search', [DestinationController::class, 'search'])->name('search');
@@ -50,4 +52,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

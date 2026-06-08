@@ -17,6 +17,8 @@ class Destination extends Model
         'entrance_fee',
         'google_maps_url',
         'visiting_tips',
+        'latitude',
+        'longitude',
     ];
 
     protected $casts = [
@@ -32,6 +34,11 @@ class Destination extends Model
     public function images()
     {
         return $this->hasMany(DestinationImage::class);
+    }
+
+    public function facilities()
+    {
+        return $this->hasMany(Facility::class);
     }
 
     public function getAverageRatingAttribute()
